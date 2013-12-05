@@ -12,15 +12,24 @@ E1.place(x=10,y=50)
 E1.insert(1,"0")
 
 nb_serveurs = 0
-print "L'entree = %s " % E1.get()
-
-
-
 
 tab_entry = []
 
 def afficherFichiers():
 	pass
+
+def fichier_longueur(f_nom):
+	f = open(f_nom)                  
+	lines = 0
+	buf_size = 1024 * 1024
+	read_f = f.read # loop optimization
+	buf = read_f(buf_size)
+	while buf:
+	        lines += buf.count('\n')
+	        buf = read_f(buf_size)
+	f.close()
+	return lines
+
 
 def choixServeur():
 	top2 = Tk()
@@ -36,7 +45,20 @@ def choixServeur():
 
 
 def creationEntreesNomsServeurs(nb_serveurs,top1):
-	for i in range(0,int(nb_serveurs)):
+	nb_lig = fichier_longueur("/home/user/Desktop/python/Cloud_TP1/liste_adresses")
+	f = open("/home/user/Desktop/python/Cloud_TP1/liste_adresses")
+	lig = f.readlines()
+	if(nb_lig < int(nb_serveurs)):
+		for i in range(0,nb_lig):
+			l = Label(top1, text="Nom du serveur num "+str(i+1)+" : ")
+			l.pack(side = LEFT)
+			l.place(x=0,y=(2*i+1)*25)
+			e = Entry(top1,bd=2)
+			e.insert(0,lig[i])
+			e.pack(side = RIGHT)
+			e.place(x=10,y=(i+1)*50)
+			tab_entry.append(e)
+		for i in range(nb_lig,int(nb_serveurs)):
 			l = Label(top1, text="Nom du serveur num "+str(i+1)+" : ")
 			l.pack(side = LEFT)
 			l.place(x=0,y=(2*i+1)*25)
@@ -44,6 +66,17 @@ def creationEntreesNomsServeurs(nb_serveurs,top1):
 			e.pack(side = RIGHT)
 			e.place(x=10,y=(i+1)*50)
 			tab_entry.append(e)
+	else:
+		for i in range(0,int(nb_serveurs)):
+			l = Label(top1, text="Nom du serveur num "+str(i+1)+" : ")
+			l.pack(side = LEFT)
+			l.place(x=0,y=(2*i+1)*25)
+			e = Entry(top1,bd=2)
+			e.insert(0,lig[i])
+			e.pack(side = RIGHT)
+			e.place(x=10,y=(i+1)*50)
+			tab_entry.append(e)
+	f.close()
 
 def entreeNomsServeurs():
 	if int(E1.get())>0:
